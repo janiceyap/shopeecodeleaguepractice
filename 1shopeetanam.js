@@ -19,18 +19,18 @@ function tabulate(input){
 
             // each for loop handles each line (N) in a test case.
 
-            let cumSumLeft = [[],[]];
-            let cumSumRight = [[],[]];
+            let cumSumLeft = [[]];
+            let cumSumRight = [[]];
 
-            let maxSumLeft = [[],[]];
-            let maxSumRight = [[],[]];
+            let maxSumLeft = [];
+            let maxSumRight = [];
 
-            let kLeft = [[],[]];
-            let kRight = [[],[]];
+            let kLeft = [];
+            let kRight = [];
 
-            let optionsleft = [[],[],[]];
-            let optionsflex = [[],[],[]];
-            let optionsright = [[],[],[]];
+            let optionsleft = [[]];
+            let optionsflex = [[]];
+            let optionsright = [[]];
 
             // j is the Nth line of each test case
 
@@ -104,19 +104,19 @@ function tabulate(input){
                         }
                     } else if (maxSumLeft[j]<=0 && kLeft[j]==input[i][1]-1){
                         if (!isNaN(parseInt(optionsleft[j-1]))) {
-                            optionsflex[j].push(parseInt(optionsleft[j-1]));
+                            optionsflex[j].push(parseInt(parseInt(maxSumLeft[j])+parseInt(optionsleft[j-1])));
                         }
                         if (!isNaN(parseInt(optionsflex[j-1]))){
-                            optionsflex[j].push(parseInt(optionsflex[j-1]));
+                            optionsflex[j].push(parseInt(parseInt(maxSumLeft[j])+parseInt(optionsflex[j-1])));
                         } 
-                    } else if (maxSumLeft[j]>0 && kLeft[j]<input[i][1]-1){
+                    } else if (maxSumLeft[j]>0 && kLeft[j]<input[i][1]-1 && cumSumLeft[j][kLeft[j]]!==cumSumLeft[j][input[i][1]-1]){
                         if (!isNaN(parseInt(optionsleft[j-1]))){
                             optionsleft[j].push(parseInt(parseInt(maxSumLeft[j])+parseInt(optionsleft[j-1])));
                         }
                         if (!isNaN(parseInt(optionsflex[j-1]))){
                             optionsleft[j].push(parseInt(parseInt(maxSumLeft[j])+parseInt(optionsflex[j-1])));
                         }
-                    } else if (maxSumLeft[j]>0 && kLeft[j]==input[i][1]-1){
+                    } else if (maxSumLeft[j]>0){
                         if (!isNaN(parseInt(optionsleft[j-1]))){
                             optionsflex[j].push(parseInt(parseInt(maxSumLeft[j])+parseInt(optionsleft[j-1])));
                         }
@@ -125,9 +125,9 @@ function tabulate(input){
                         }                        
                     }
 
-                    if (kLeft[j] !== input[i][1]-1) {
-                        optionsflex[j].push(cumSumLeft[j][input[i][1]-1])
-                    }
+                    // if (kLeft[j] !== input[i][1]-1) {
+                    //     optionsflex[j].push(cumSumLeft[j][input[i][1]-1])
+                    // }
 
                     if (maxSumRight[j]<=0 && kRight[j]>0){
                         if (!isNaN(parseInt(optionsright[j-1]))){
@@ -171,6 +171,13 @@ function tabulate(input){
                         output.push(Math.max(...flatArray));                        
                     } 
                 }
+
+                cumSumLeft.push([]);
+                cumSumRight.push([]);
+
+                optionsleft.push([]);
+                optionsflex.push([]);
+                optionsright.push([]);
 
                 console.log("options left", optionsleft[j]);
                 console.log("options flex", optionsflex[j]);   
