@@ -59,18 +59,14 @@ function tabulate(input){
                     maxSumLeft[j] = Math.max(...cumSumLeft[j]);
                     kLeft[j] = cumSumLeft[j].indexOf(maxSumLeft[j]);
 
-                    if (maxSumLeft[j]<=0 && kLeft[j]<input[i][1]-1){
+                    if (maxSumLeft[j]<=0){
                         optionsleft[j].push(0);
-                    } else if (maxSumLeft[j]<=0 && kLeft[j]==input[i][1]-1){
-                        optionsflex[j].push(0);
-                    } else if (maxSumLeft[j]>0 && kLeft[j]<input[i][1]-1){
-                        optionsleft[j].push(maxSumLeft[j]);
-                    } else if (maxSumLeft[j]>0 && kLeft[j]==input[i][1]-1){
-                        optionsflex[j].push(maxSumLeft[j]);
-                    }
-
-                    if (kLeft[j] !== input[i][1]-1) {
-                        optionsflex[j].push(cumSumLeft[j][input[i][1]-1])
+                        optionsflex[j].push(parseInt(cumSumLeft[j][input[i][1]-1]));
+                    } else if (maxSumLeft[j]>0 && kLeft[j]<input[i][1]-1 && maxSumLeft[j]!==cumSumLeft[j][input[i][1]-1]){
+                        optionsleft[j].push(parseInt(maxSumLeft[j]));
+                        optionsflex[j].push(parseInt(cumSumLeft[j][input[i][1]-1]));
+                    } else if (maxSumLeft[j]>0){
+                        optionsflex[j].push(parseInt(maxSumLeft[j]));
                     }
 
                     // case of only 1 row.
@@ -95,26 +91,23 @@ function tabulate(input){
                     console.log("maxSumRight", maxSumRight);
                     console.log("kright", kRight);
 
-                    if (maxSumLeft[j]<=0 && kLeft[j]<input[i][1]-1){
+                    if (maxSumLeft[j]<=0){
                         if (!isNaN(parseInt(optionsleft[j-1]))) {
                             optionsleft[j].push(parseInt(optionsleft[j-1]));
+                            optionsflex[j].push(parseInt(parseInt(optionsleft[j-1])+parseInt(cumSumLeft[j][input[i][1]-1]))); 
                         }
                         if (!isNaN(parseInt(optionsflex[j-1]))) {
                             optionsleft[j].push(parseInt(optionsflex[j-1]));
+                            optionsflex[j].push(parseInt(parseInt(optionsflex[j-1])+parseInt(cumSumLeft[j][input[i][1]-1])));
                         }
-                    } else if (maxSumLeft[j]<=0 && kLeft[j]==input[i][1]-1){
-                        if (!isNaN(parseInt(optionsleft[j-1]))) {
-                            optionsflex[j].push(parseInt(parseInt(maxSumLeft[j])+parseInt(optionsleft[j-1])));
-                        }
-                        if (!isNaN(parseInt(optionsflex[j-1]))){
-                            optionsflex[j].push(parseInt(parseInt(maxSumLeft[j])+parseInt(optionsflex[j-1])));
-                        } 
                     } else if (maxSumLeft[j]>0 && kLeft[j]<input[i][1]-1 && cumSumLeft[j][kLeft[j]]!==cumSumLeft[j][input[i][1]-1]){
                         if (!isNaN(parseInt(optionsleft[j-1]))){
                             optionsleft[j].push(parseInt(parseInt(maxSumLeft[j])+parseInt(optionsleft[j-1])));
+                            optionsflex[j].push(parseInt(parseInt(optionsleft[j-1])+parseInt(cumSumLeft[j][input[i][1]-1]))); 
                         }
                         if (!isNaN(parseInt(optionsflex[j-1]))){
                             optionsleft[j].push(parseInt(parseInt(maxSumLeft[j])+parseInt(optionsflex[j-1])));
+                            optionsflex[j].push(parseInt(parseInt(optionsflex[j-1])+parseInt(cumSumLeft[j][input[i][1]-1])));
                         }
                     } else if (maxSumLeft[j]>0){
                         if (!isNaN(parseInt(optionsleft[j-1]))){
@@ -125,9 +118,8 @@ function tabulate(input){
                         }                        
                     }
 
-                    // if (kLeft[j] !== input[i][1]-1) {
-                    //     optionsflex[j].push(cumSumLeft[j][input[i][1]-1])
-                    // }
+                    // edited the logic till here. 
+
 
                     if (maxSumRight[j]<=0 && kRight[j]>0){
                         if (!isNaN(parseInt(optionsright[j-1]))){
